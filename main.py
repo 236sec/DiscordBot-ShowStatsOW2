@@ -1,23 +1,33 @@
 import discord
 import os
+import json
+from ow_api import get_stats
 
 intents = discord.Intents.default()
-intents.messages = True
+intents.members = True
+
 client = discord.Client(intents=intents)
-TOKEN = os.environ['TOKEN']
 
 @client.event
 async def on_ready():
   print(f"Logged in as {client.user}")
 
+
 @client.event
 async def on_message(message):
-  print(message)
-  if message.author == client.user:
-      return
+    if message.author == client.user:
+        return 0
+    fetch_message = await message.channel.fetch_message(message.id)
+    content = fetch_message.content
+    if content.startswith('$ow'):
+        await message.channel.send('Hello!')
+        inputPlayername = content.split(' ')[1]
+        respond = get_stats(player_name = inputPlayername,region='us',platform = 'pc')
+        respond = json.loads(respond)
+        print(type(respond))
+        print(respond)
+        #await message.channel.send(respond)
+    else:
+      print("Message :",content)
 
-  if message.content.startswith('$ow'):
-      channel = message.channel
-      await channel.send('Im OW Stats Here')
-
-client.run(TOKEN)
+client.run(os.environ['TOKEN'])
