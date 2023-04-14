@@ -20,7 +20,14 @@ def text_format(api_respond):
     gameplayed = int(api_respond['competitiveStats']['games']['played'])
     winrate = (api_respond['competitiveStats']['games']['won']/gameplayed) *100
     winrate = f'{winrate:.2f}'
-    return f"__**{name}**__ :video_game:\n\nEndorsement Level : :{endorsementText}:\n\nGAMEPLAYED:**{gameplayed}**  WINRATE:**{winrate}**\n\n**Warning:** This text is highlighted in red.\n\n:warning: Be careful when using this command!\n"
+    tankrole = api_respond['ratings'][0]
+    dpsrole = api_respond['ratings'][1]
+    supportrole = api_respond['ratings'][2]
+    return f"__**{name}**__ :video_game:\n\nEndorsement Level : :{endorsementText}:\n\n\
+  GAMEPLAYED:**{gameplayed}**  WINRATE:**{winrate}%**\n\n\
+  **TANK:** {tankrole['group']} {tankrole['tier']}\n\n\
+  **DPS:** {dpsrole['group']} {dpsrole['tier']}\n\n\
+  **Support:** {supportrole['group']} {supportrole['tier']}\n\n"
 
 
 def test():
